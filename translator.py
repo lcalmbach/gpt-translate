@@ -1,7 +1,6 @@
 import os
 import openai
 import json
-import streamlit as st
 from helper import get_var
 
 import const
@@ -22,15 +21,16 @@ class Translator:
         return response.choices[0].message["content"]
 
     def get_source_file(file_path):
-        """
-        not used, will be used when module is called from a scripts, 
-        translating multiple files
+        """The get_source_file function takes in a file path as an argument 
+        and returns a JSON object loaded from the file. The function uses 
+        the "with...as" statement to open the file, reads its contents as a JSON 
+        object and finally returns the JSON object.
 
         Args:
-            file_path (_type_): _description_
+            file_path (_type_): file in json fomrat
 
         Returns:
-            _type_: _description_
+            obj: content from json file as object
         """
         with open(file_path, "r") as file:
             # Load the contents of the file as a JSON object
@@ -103,7 +103,7 @@ class Translator:
         >> result = translator.translate()
         >> # result will be a dictionary with the translated texts
         """
-        
+
         openai.api_key = get_var("OPENAI_API_KEY")
         completed_language_json = self.complete_source_to_input(self.language_json)
 
@@ -114,7 +114,6 @@ class Translator:
             {"role": "user", "content": user_message},
         ]
         response = self.get_completion_from_messages(messages)
-        st.write(response)
         translated_dict = self.parse_gpt_output(
             json.loads(response), completed_language_json
         )

@@ -6,7 +6,7 @@ PolyglotGPT is a web application built with Streamlit that allows users to trans
   "en": {
     "language": "Language",
     "welcome": "Welcome"
-  }
+  },
   "de": {},
   "fr": {}
 }
@@ -17,11 +17,11 @@ The first langauge must be filled with texts, while all following language keys 
   "en": {
     "language": "Language",
     "welcome": "Welcome"
-  }
+  },
   "de": {
     "language": "Sprache",
     "welcome": "Willkommen"
-  }
+  },
   "fr": {
     "language": "Langue",
     "welcome": "Bienvenue"
