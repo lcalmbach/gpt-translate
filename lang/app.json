@@ -1,0 +1,72 @@
+{
+  "en": {
+    "app-info": "PolyglotGPT allows to translate json formatted text snippets to various other languages using the OpenAI API. The upload must include one implemented language formatted as shown below. The language keys (en, de, fr etc.) must conform to [ISO 639-1 standard](https://en.wikipedia.org/wiki/ISO_639-1). Drag and drop your json language file into the file upload above and press the translate button. The translated file is then displayed and can be downloaded.",
+    "language": "Language",
+    "welcome": "Welcome",
+    "menu": "Menu",
+    "translation": "Translation",
+    "file-load-success": "File uploaded and parsed successfully!",
+    "file-load-error": "Error: Invalid JSON file.",
+    "upload": "Upload file",
+    "download-result": "Download translation",
+    "information": "Information",
+    "input": "Input",
+    "output": "Output"
+  },
+  "de": {
+    "app-info": "PolyglotGPT erm\u00f6glicht das \u00dcbersetzen von JSON-formatierten Textausschnitten in verschiedene andere Sprachen mithilfe der OpenAI-API. Der Upload muss eine implementierte Sprache im unten gezeigten Format enthalten. Die Sprachschl\u00fcssel (en, de, fr usw.) m\u00fcssen dem [ISO 639-1-Standard](https://de.wikipedia.org/wiki/ISO_639-1) entsprechen. Ziehen Sie Ihre JSON-Sprachdatei in die obige Datei-Upload-Box und dr\u00fccken Sie die \u00dcbersetzen-Schaltfl\u00e4che. Die \u00fcbersetzte Datei wird dann angezeigt und kann heruntergeladen werden.",
+    "language": "Sprache",
+    "welcome": "Willkommen",
+    "menu": "Men\u00fc",
+    "translation": "\u00dcbersetzung",
+    "file-load-success": "Datei erfolgreich hochgeladen und analysiert!",
+    "file-load-error": "Fehler: Ung\u00fcltige JSON-Datei.",
+    "upload": "Datei hochladen",
+    "download-result": "\u00dcbersetzung herunterladen",
+    "information": "Informationen",
+    "input": "Eingabe",
+    "output": "Ausgabe"
+  },
+  "fr": {
+    "app-info": "PolyglotGPT permet de traduire des extraits de texte au format JSON dans diff\u00e9rentes langues \u00e0 l'aide de l'API OpenAI. Le t\u00e9l\u00e9chargement doit inclure une langue impl\u00e9ment\u00e9e format\u00e9e comme indiqu\u00e9 ci-dessous. Les cl\u00e9s de langue (en, de, fr, etc.) doivent \u00eatre conformes \u00e0 la norme [ISO 639-1](https://fr.wikipedia.org/wiki/ISO_639-1). Faites glisser et d\u00e9posez votre fichier de langue JSON dans la zone de t\u00e9l\u00e9chargement de fichier ci-dessus et appuyez sur le bouton de traduction. Le fichier traduit est ensuite affich\u00e9 et peut \u00eatre t\u00e9l\u00e9charg\u00e9.",
+    "language": "Langue",
+    "welcome": "Bienvenue",
+    "menu": "menu",
+    "translation": "Traduction",
+    "file-load-success": "Fichier t\u00e9l\u00e9charg\u00e9 et analys\u00e9 avec succ\u00e8s !",
+    "file-load-error": "Erreur : fichier JSON invalide.",
+    "upload": "T\u00e9l\u00e9charger le fichier",
+    "download-result": "T\u00e9l\u00e9charger la traduction",
+    "information": "Information",
+    "input": "Entr\u00e9e",
+    "output": "Sortie"
+  },
+  "es": {
+    "app-info": "PolyglotGPT permite traducir fragmentos de texto con formato JSON a varios idiomas utilizando la API de OpenAI. La carga debe incluir un idioma implementado con el formato que se muestra a continuaci\u00f3n. Las claves de idioma (en, de, fr, etc.) deben cumplir con el est\u00e1ndar [ISO 639-1](https://es.wikipedia.org/wiki/ISO_639-1). Arrastre y suelte su archivo de idioma JSON en el cuadro de carga de archivos de arriba y presione el bot\u00f3n de traducci\u00f3n. El archivo traducido se mostrar\u00e1 y se podr\u00e1 descargar.",
+    "language": "Idioma",
+    "welcome": "Bienvenido",
+    "menu": "Men\u00fa",
+    "translation": "Traducci\u00f3n",
+    "file-load-success": "\u00a1Archivo cargado y analizado correctamente!",
+    "file-load-error": "Error: archivo JSON no v\u00e1lido.",
+    "upload": "Cargar archivo",
+    "download-result": "Descargar traducci\u00f3n",
+    "information": "Informaci\u00f3n",
+    "input": "Entrada",
+    "output": "Salida"
+  },
+  "zh": {
+    "app-info": "PolyglotGPT \u5141\u8bb8\u4f7f\u7528 OpenAI API \u5c06 JSON \u683c\u5f0f\u7684\u6587\u672c\u7247\u6bb5\u7ffb\u8bd1\u6210\u5404\u79cd\u5176\u4ed6\u8bed\u8a00\u3002\u4e0a\u4f20\u5fc5\u987b\u5305\u62ec\u4e00\u4e2a\u5b9e\u73b0\u7684\u8bed\u8a00\uff0c\u683c\u5f0f\u5982\u4e0b\u6240\u793a\u3002\u8bed\u8a00\u952e\uff08en\u3001de\u3001fr \u7b49\uff09\u5fc5\u987b\u7b26\u5408 [ISO 639-1 \u6807\u51c6](https://zh.wikipedia.org/wiki/ISO_639-1)\u3002\u5c06\u60a8\u7684 JSON \u8bed\u8a00\u6587\u4ef6\u62d6\u653e\u5230\u4e0a\u9762\u7684\u6587\u4ef6\u4e0a\u4f20\u6846\u4e2d\uff0c\u7136\u540e\u6309\u7ffb\u8bd1\u6309\u94ae\u3002\u7136\u540e\u663e\u793a\u5df2\u7ffb\u8bd1\u7684\u6587\u4ef6\uff0c\u53ef\u4ee5\u4e0b\u8f7d\u3002",
+    "language": "\u8bed\u8a00",
+    "welcome": "\u6b22\u8fce",
+    "menu": "\u83dc\u5355",
+    "translation": "\u7ffb\u8bd1",
+    "file-load-success": "\u6587\u4ef6\u4e0a\u4f20\u5e76\u89e3\u6790\u6210\u529f\uff01",
+    "file-load-error": "\u9519\u8bef\uff1a\u65e0\u6548\u7684 JSON \u6587\u4ef6\u3002",
+    "upload": "\u4e0a\u4f20\u6587\u4ef6",
+    "download-result": "\u4e0b\u8f7d\u7ffb\u8bd1",
+    "information": "\u4fe1\u606f",
+    "input": "\u8f93\u5165",
+    "output": "\u8f93\u51fa"
+  }
+}
