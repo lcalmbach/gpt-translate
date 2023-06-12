@@ -11,7 +11,7 @@ PolyglotGPT is a web application built with Streamlit that allows users to trans
   "fr": {}
 }
 ```
-The first language must be filled with texts, while all following language keys are generally empty. PolyglotGPT will translate all missing tags in the subsequent language sections:
+The first language must be filled with texts, while all following language keys are generally empty. PolyglotGPT will translate all missing tags in the subsequent language sections. Texts that are found in the languages to be translated will not be translated again. You may therefore manually edit translated texts and these edits will be kept when resubmitting the json file for translation of new texts.
 ```
 {
   "en": {
