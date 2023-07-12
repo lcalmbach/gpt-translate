@@ -1,13 +1,47 @@
-import os
+import streamlit as st
 import openai
 import json
-from helper import get_var
-
+from helper import get_var, get_lang_name
 import const
+
 
 class Translator:
     def __init__(self, json_input: dict):
         self.language_json = json_input
+        keys = json_input.keys()
+        self.lang_list = list(keys)[1:]
+        self.source_lang = self.lang_list[0]
+        self.changed_items = self.get_changed_items()
+        self.source_lang_full = get_lang_name(self.source_lang)
+        self.info = self.get_info()
+
+    def get_info(self):
+        text = f"Target languages: {', '.join(self.lang_list)}"
+        text += f"\n\r{len(self.changed_items)} changed items found"
+        text += f"\n\rTranslation from {self.source_lang_full}"
+        return text
+
+    def get_changed_items(self):
+        changes_items = []
+        source = self.language_json["source"]
+        source_lang = self.language_json[self.source_lang]
+        for k, v in source.items():
+            if k not in source_lang:
+                changes_items.append(k)
+            elif type(source[k]) == list:
+                if not (k in source_lang):
+                    changes_items.append(k)
+                    break
+                else:
+                    for item in source[k]:
+                        if not item.encode("utf-8") in [x.encode("utf-8") for x in source_lang[k]]:
+                            changes_items.append(k)
+                            break
+
+            else:
+                if v.encode("utf-8") != source_lang[k].encode("utf-8"):
+                    changes_items.append(k)
+        return changes_items
 
     def get_completion_from_messages(
         self, messages, model="gpt-3.5-turbo", temperature=0, max_tokens=2000
@@ -21,9 +55,9 @@ class Translator:
         return response.choices[0].message["content"]
 
     def get_source_file(file_path):
-        """The get_source_file function takes in a file path as an argument 
-        and returns a JSON object loaded from the file. The function uses 
-        the "with...as" statement to open the file, reads its contents as a JSON 
+        """The get_source_file function takes in a file path as an argument
+        and returns a JSON object loaded from the file. The function uses
+        the "with...as" statement to open the file, reads its contents as a JSON
         object and finally returns the JSON object.
 
         Args:
@@ -37,35 +71,11 @@ class Translator:
             lang = json.load(file)
         return lang
 
-    def complete_source_to_input(self, source_dict: dict):
-        result = source_dict.copy()
-        source_lang = next(iter(source_dict))
-        expressions_en = source_dict[source_lang]
-        for lang in source_dict:
-            if lang != source_lang:
-                for expr_key, expr_value in expressions_en.items():
-                    if not (expr_key in source_dict[lang]):
-                        result[lang][expr_key] = ""
-        return result
-
     def save_json_file(file_path, data):
         with open(file_path, "w") as file:
             json.dump(data, file)
 
-    def get_input(self, dat_dict):
-        result = {}
-        source_lang = next(iter(dat_dict))
-        for lang, value in dat_dict.items():
-            result[lang] = []
-            if lang == source_lang:
-                result[lang] = value
-            else:
-                result[lang] = []
-                for expr_key, expr_value in value.items():
-                    result[lang].append(expr_key)
-        return result
-
-    def parse_gpt_output(self, translated_dict: dict, source_dict: dict):
+    def parse_gpt_output(self, translated_dict: dict, source_dict: dict, lang):
         """_summary_
 
         Args:
@@ -77,27 +87,63 @@ class Translator:
         Returns:
             _type_: _description_
         """
-        for lang, expressions in translated_dict.items():
-            for expr_key, expr_value in expressions.items():
-                source_dict[lang][expr_key] = expr_value
-        return source_dict
+        result = {}
+        for key in list(self.language_json["source"].keys()):
+            # if key has been translated, use it is as previously translated
+            if type(self.language_json["source"][key]) == list:
+                if key in source_dict.keys():
+                    result[key] = translated_dict[key]
+                else:
+                    result[key] = self.language_json[lang][key]
+            else:
+                if key in source_dict.keys():
+                    result[key] = translated_dict[key]
+                else:
+                    result[key] = self.language_json[lang][key]
+        return result
+
+    def init_translation(self):
+        translated = {}
+        translated["source"] = self.language_json["source"]
+        translated[self.source_lang] = self.language_json["source"]
+        return translated
+
+    def get_items_to_translate(self, lang):
+        result = {}
+        source = self.language_json["source"]
+        target = self.language_json[lang]
+        in_keys = list(source.keys())
+        out_keys = list(target.keys())
+        for key in in_keys:
+            if type(source[key]) == list:
+                if not key in out_keys or key in self.changed_items:
+                    result[key] = source[key]
+                elif target[key] == []:
+                    result[key] = source[key]
+            else:
+                # item has not been created yet
+                if not key in out_keys or key in self.changed_items:
+                    result[key] = source[key]
+                elif target[key] == "":
+                    result[key] = source[key]
+        return result
 
     def translate(self):
         """
         Uses OpenAI's GPT-3 to automatically translate texts from one language to another.
-    
+
         Returns a dictionary with the translated texts. Note that this method requires the
         OPENAI_API_KEY environment variable to be set with a valid API key for OpenAI's GPT-3 service.
-    
+
         By default, this method translates texts to English (the 'en' language code). To change the
         target language, modify the `self.language_json` attribute before calling this method.
-    
+
         This method generates a prompt message and submits it to the GPT-3 API. The prompt message
         includes the contents of `self.language_json`, which contains a list of texts to translate.
-    
+
         The API response is parsed to obtain the translated texts, which are returned as a
         dictionary with the original texts as keys and the translated texts as values.
-    
+
         Example usage:
         >> translator = MyTranslator()
         >> result = translator.translate()
@@ -105,16 +151,21 @@ class Translator:
         """
 
         openai.api_key = get_var("OPENAI_API_KEY")
-        completed_language_json = self.complete_source_to_input(self.language_json)
+        translated = self.init_translation()
 
-        gpt_input = self.get_input(completed_language_json)
-        user_message = f"Translate the following texts: ####{json.dumps(gpt_input)}####"
-        messages = [
-            {"role": "system", "content": const.system_message},
-            {"role": "user", "content": user_message},
-        ]
-        response = self.get_completion_from_messages(messages)
-        translated_dict = self.parse_gpt_output(
-            json.loads(response), completed_language_json
-        )
-        return translated_dict
+        for lang in self.lang_list:
+            if lang != self.source_lang:
+                items_to_translate = self.get_items_to_translate(lang)
+                target_lang_full = get_lang_name(lang)
+                user_message = f"""Translate the following texts from {self.source_lang_full} to 
+                    {target_lang_full}: ####{json.dumps(items_to_translate)}####"""
+                messages = [
+                    {"role": "system", "content": const.system_message},
+                    {"role": "user", "content": user_message},
+                ]
+                response = self.get_completion_from_messages(messages)
+                translated[lang] = self.parse_gpt_output(
+                    json.loads(response), items_to_translate, lang
+                )
+
+        return translated

@@ -8,6 +8,10 @@ import socket
 import const as cn
 
 
+def get_lang_name(lang_code):
+    return get_all_language_dict()[lang_code]
+
+
 def get_lang_dict_complete():
     with open(cn.LANG_FILE, "r") as file:
         # Load the contents of the file as a JSON object
@@ -65,8 +69,14 @@ def get_var(varname: str):
         return st.secrets[varname]
 
 
-LOCAL_HOST = 'liestal'
+def is_valid_json(json_str):
+    try:
+        json.loads(json_str)
+        return True
+    except ValueError:
+        return False
+
+
+LOCAL_HOST = "liestal"
 # list of all iso639 languages
 lang_dict_complete = get_lang_dict_complete()
-
-
