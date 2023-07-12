@@ -19,9 +19,8 @@ def get_app_info():
     info = f"""<div style="background-color:powderblue; padding: 10px;border-radius: 15px;">
     <small>{created_by} <a href="mailto:{__author_email__}">{__author__}</a><br>
     {version}: {__version__} ({VERSION_DATE})<br>
-    {powered_by} <a href="https://streamlit.io/">Streamlit</a>, 
+    {powered_by} <a href="https://streamlit.io/">Streamlit</a> and 
     <a href="https://platform.openai.com/">OpenAI API</a> 
-    and<br><a href="https://platform.openai.com/">OpenAI API</a><br>
     <a href="{GIT_REPO}">git-repo</a>
     """
     return info
