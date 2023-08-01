@@ -1,4 +1,3 @@
-import streamlit as st
 import openai
 import json
 from helper import get_var, get_lang_name
@@ -44,7 +43,7 @@ class Translator:
         return changes_items
 
     def get_completion_from_messages(
-        self, messages, model="gpt-3.5-turbo", temperature=0, max_tokens=2000
+        self, messages, model="gpt-3.5-turbo", temperature=0, max_tokens=3000
     ):
         response = openai.ChatCompletion.create(
             model=model,
@@ -157,10 +156,9 @@ class Translator:
             if lang != self.source_lang:
                 items_to_translate = self.get_items_to_translate(lang)
                 target_lang_full = get_lang_name(lang)
-                user_message = f"""Translate the following texts from {self.source_lang_full} to 
-                    {target_lang_full}: ####{json.dumps(items_to_translate)}####"""
+                user_message = json.dumps(items_to_translate)
                 messages = [
-                    {"role": "system", "content": const.system_message},
+                    {"role": "system", "content": const.system_message.format(self.source_lang_full, target_lang_full)},
                     {"role": "user", "content": user_message},
                 ]
                 response = self.get_completion_from_messages(messages)

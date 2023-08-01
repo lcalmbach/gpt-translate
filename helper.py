@@ -13,13 +13,36 @@ def get_lang_name(lang_code):
 
 
 def get_lang_dict_complete():
-    with open(cn.LANG_FILE, "r") as file:
-        # Load the contents of the file as a JSON object
-        lang = json.load(file)
+    """
+    Retrieves the complete language dictionary from a JSON file.
+
+    Returns:
+    - lang (dict): A Python dictionary containing all the language strings.
+    """
+
+    try:
+        with open(cn.LANG_FILE, "r") as file:
+            lang = json.load(file)
+    except FileNotFoundError:
+        print("File not found.")
+        return {}
+    except json.JSONDecodeError:
+        print("Invalid JSON format.")
+        return {}
+    except Exception as e:
+        print("An error occurred:", str(e))
+        return {}
     return lang
 
 
 def get_all_language_dict():
+    """
+    Retrieves a dictionary containing all the available languages and their 
+    ISO 639-1 codes.
+    
+    Returns:
+        language_dict (dict): A Python dictionary where the keys are the ISO 639-1 codes and the values are the language names.
+    """
     keys = [lang["iso639_1"] for lang in iso639.data if lang["iso639_1"] != ""]
     values = [lang["name"] for lang in iso639.data if lang["iso639_1"] != ""]
     language_dict = dict(zip(keys, values))
