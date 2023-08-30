@@ -4,11 +4,11 @@ import const as cn
 import json
 from translator import Translator
 
-__version__ = "0.0.3"
+__version__ = "0.0.4"
 __author__ = "Lukas Calmbach"
 __author_email__ = "lcalmbach@gmail.com"
-VERSION_DATE = "2023-08-02"
-GIT_REPO = 'https://github.com/lcalmbach/gpt-translate'
+VERSION_DATE = "2023-08-30"
+GIT_REPO = "https://github.com/lcalmbach/gpt-translate"
 lang = {}
 
 
@@ -46,11 +46,11 @@ def get_app_info():
 
 def refresh_lang():
     """
-    The refresh_lang function is responsible for refreshing the language dictionary used 
-    in the application. It updates the lang_dict variable in the session state with 
+    The refresh_lang function is responsible for refreshing the language dictionary used
+    in the application. It updates the lang_dict variable in the session state with
     the new language dictionary obtained from the get_lang function.
 
-    The function then displays the updated language dictionary and finally 
+    The function then displays the updated language dictionary and finally
     triggers a rerun of the application to refresh all language on the UI.
     """
     st.session_state["lang_dict"] = get_lang(st.session_state["lang"])
@@ -60,8 +60,8 @@ def refresh_lang():
 
 def display_language_selection():
     """
-    The display_info function displays information about the application. It 
-    uses the st.expander container to create an expandable section for the 
+    The display_info function displays information about the application. It
+    uses the st.expander container to create an expandable section for the
     information. Inside the expander, displays the input and output format.
     """
     index = list(st.session_state["used_languages_dict"].keys()).index(
@@ -134,7 +134,9 @@ def display_upload():
             if st.button("Start translation"):
                 translated_page = translation.translate()
                 st.write(translated_page)
-                download_button(translated_page, "translated.json", lang["download-result"])
+                download_button(
+                    translated_page, "translated.json", lang["download-result"]
+                )
 
 
 def main():

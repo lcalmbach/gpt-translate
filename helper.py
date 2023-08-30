@@ -37,9 +37,9 @@ def get_lang_dict_complete():
 
 def get_all_language_dict():
     """
-    Retrieves a dictionary containing all the available languages and their 
+    Retrieves a dictionary containing all the available languages and their
     ISO 639-1 codes.
-    
+
     Returns:
         language_dict (dict): A Python dictionary where the keys are the ISO 639-1 codes and the values are the language names.
     """

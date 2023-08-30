@@ -2,6 +2,7 @@ import openai
 import json
 from helper import get_var, get_lang_name
 import const
+import streamlit as st
 
 
 class Translator:
@@ -33,7 +34,9 @@ class Translator:
                     break
                 else:
                     for item in source[k]:
-                        if not item.encode("utf-8") in [x.encode("utf-8") for x in source_lang[k]]:
+                        if not item.encode("utf-8") in [
+                            x.encode("utf-8") for x in source_lang[k]
+                        ]:
                             changes_items.append(k)
                             break
 
@@ -43,7 +46,7 @@ class Translator:
         return changes_items
 
     def get_completion_from_messages(
-        self, messages, model="gpt-3.5-turbo", temperature=0, max_tokens=3000
+        self, messages, model="gpt-3.5-turbo", temperature=0, max_tokens=2000
     ):
         response = openai.ChatCompletion.create(
             model=model,
@@ -74,28 +77,27 @@ class Translator:
         with open(file_path, "w") as file:
             json.dump(data, file)
 
-    def parse_gpt_output(self, translated_dict: dict, source_dict: dict, lang):
+    def parse_gpt_output(self, translated_dict: dict, lang: str):
         """_summary_
 
         Args:
             translated_dict (dict): dict with translations: only expressions
                                     marked in the source file to be translated are
                                     included.
-            source_dict (dict):     dict including all expressions this structure is overwritten with translated texts
 
         Returns:
             _type_: _description_
         """
         result = {}
         for key in list(self.language_json["source"].keys()):
-            # if key has been translated, use it is as previously translated
+            # if key has been translated, use it as previously translated
             if type(self.language_json["source"][key]) == list:
-                if key in source_dict.keys():
+                if key in translated_dict.keys():
                     result[key] = translated_dict[key]
                 else:
                     result[key] = self.language_json[lang][key]
             else:
-                if key in source_dict.keys():
+                if key in translated_dict.keys():
                     result[key] = translated_dict[key]
                 else:
                     result[key] = self.language_json[lang][key]
@@ -105,6 +107,9 @@ class Translator:
         translated = {}
         translated["source"] = self.language_json["source"]
         translated[self.source_lang] = self.language_json["source"]
+        for lang in self.lang_list:
+            if not (lang in ["source", self.source_lang]):
+                translated[lang] = {}
         return translated
 
     def get_items_to_translate(self, lang):
@@ -151,19 +156,27 @@ class Translator:
 
         openai.api_key = get_var("OPENAI_API_KEY")
         translated = self.init_translation()
-
         for lang in self.lang_list:
             if lang != self.source_lang:
                 items_to_translate = self.get_items_to_translate(lang)
                 target_lang_full = get_lang_name(lang)
-                user_message = json.dumps(items_to_translate)
-                messages = [
-                    {"role": "system", "content": const.system_message.format(self.source_lang_full, target_lang_full)},
-                    {"role": "user", "content": user_message},
-                ]
-                response = self.get_completion_from_messages(messages)
-                translated[lang] = self.parse_gpt_output(
-                    json.loads(response), items_to_translate, lang
-                )
+                for key, value in items_to_translate.items():
+                    user_message = json.dumps(value)
+                    messages = [
+                        {
+                            "role": "system",
+                            "content": const.system_message.format(
+                                self.source_lang_full, target_lang_full
+                            ),
+                        },
+                        {"role": "user", "content": user_message},
+                    ]
+                    response = self.get_completion_from_messages(messages)
+                    st.write(response)
+                    try:
+                        translated[lang][key] = json.loads(response)
+                    except:
+                        translated[lang][key] = response
+                translated[lang] = self.parse_gpt_output(translated[lang], lang)
 
         return translated
